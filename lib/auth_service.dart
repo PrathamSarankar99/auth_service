@@ -1,6 +1,7 @@
 library auth_service;
 
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 // import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 
@@ -13,6 +14,10 @@ class Calculator {
 class AuthService {
   static Stream<User?> authStream() {
     return FirebaseAuth.instance.authStateChanges();
+  }
+
+  static initialize() async {
+    await Firebase.initializeApp();
   }
 
   static User? currentUser() {

@@ -56,8 +56,9 @@ class AuthService {
     await FirebaseAuth.instance.verifyPhoneNumber(
       timeout: timeout,
       phoneNumber: phoneno,
-      verificationCompleted: (phoneAuthCredential) {
-        FirebaseAuth.instance.signInWithCredential(phoneAuthCredential);
+      verificationCompleted: (phoneAuthCredential) async {
+        await FirebaseAuth.instance.signInWithCredential(phoneAuthCredential);
+        print('So, it came to the signIn section now');
         result = true;
       },
       verificationFailed: (error) {

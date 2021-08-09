@@ -57,18 +57,19 @@ class AuthService {
       timeout: timeout,
       phoneNumber: phoneno,
       verificationCompleted: (phoneAuthCredential) async {
-        await FirebaseAuth.instance.signInWithCredential(phoneAuthCredential);
-        print('So, it came to the signIn section now');
         result = true;
+        await FirebaseAuth.instance.signInWithCredential(phoneAuthCredential);
       },
       verificationFailed: (error) {
         AuthServiceException.exception = error;
       },
       codeSent: (verificationId, forceResendingToken) {
+        result = true;
         AuthServiceObjects.phoneAuthVerificationID = verificationId;
         AuthServiceObjects.phoneAuthResendingID = forceResendingToken;
       },
       codeAutoRetrievalTimeout: (verificationId) {
+        result = true;
         AuthServiceObjects.phoneAuthVerificationID = verificationId;
       },
     );

@@ -14,22 +14,22 @@ class AuthService {
     await Firebase.initializeApp();
   }
 
-  static User? currentUser() {
-    return FirebaseAuth.instance.currentUser;
-  }
+  static User? get currentUser => FirebaseAuth.instance.currentUser;
 
-  static Future<String> signInWithGoogle() async {
-    GoogleSignIn googleSignIn = GoogleSignIn();
-    GoogleSignInAccount? account = await googleSignIn.signIn();
-    GoogleSignInAuthentication authentication = await account!.authentication;
-    OAuthCredential credential = GoogleAuthProvider.credential(
-      accessToken: authentication.accessToken,
-      idToken: authentication.idToken,
-    );
-    UserCredential userCredential =
-        await FirebaseAuth.instance.signInWithCredential(credential);
-    String? name = userCredential.user!.displayName;
-    return "Logged in as $name";
+  static Future<bool> signInWithGoogle() async {
+    try {
+      GoogleSignIn googleSignIn = GoogleSignIn();
+      GoogleSignInAccount? account = await googleSignIn.signIn();
+      GoogleSignInAuthentication authentication = await account!.authentication;
+      OAuthCredential credential = GoogleAuthProvider.credential(
+        accessToken: authentication.accessToken,
+        idToken: authentication.idToken,
+      );
+      await FirebaseAuth.instance.signInWithCredential(credential);
+      return true;
+    } catch (e) {
+      return false;
+    }
   }
 
   // static Future<String> signInWithFacebook() async {
@@ -58,9 +58,13 @@ class AuthService {
   // }
 
   static Future<bool> signOut() async {
-    await GoogleSignIn().signOut();
-    // await FacebookLogin().logOut();
-    await FirebaseAuth.instance.signOut();
-    return true;
+    try {
+      await GoogleSignIn().signOut();
+      // await FacebookLogin().logOut();
+      await FirebaseAuth.instance.signOut();
+      return true;
+    } catch (e) {
+      return false;
+    }
   }
 }
